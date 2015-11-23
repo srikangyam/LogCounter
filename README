@@ -1,0 +1,36 @@
+#LogCounter
+
+Concept used: Counters in Hadoop
+
+Problem Definition:
+Given an input file that contains logs
+The target is to count the number of different types of logs
+The log contains 3 types of Logs:
+- INFO
+- ERROR
+- WARNING
+
+Sample Input file:
+INFO: Info Debug 1
+WARNING: Warning Debug 1
+INFO: Info Debug 2
+ERROR: Error Debug 1
+WARNING: Warning Debug 2
+ERROR: Error Debug 2
+INFO: Info Debug 3
+
+Output for sample input:
+INFO: 3
+WARNING: 2
+ERROR: 2
+
+
+Important Lesson:
+Value of Counter in Mapper is not accessible in the Reducer. The reason for that might be that at a time many Reducers may be simultaneously be working on the counter. So getting the correct value will require a synchronization mechanism in the HDFS Framework and well as the application. This mechanism seems neither practical nor implementable.
+
+But associative operations can surly be performed on Counter be it in Mapper or Reducer. Hence increment(value) is supported. In such a case same global copy of the Counter gets edited.
+
+On the other hand, the values are available in Driver Class. The reason is that at that point on Driver class has the access to the Counter.
+
+Also, if similar mechnaism is to be implemented, the counter values can always be written through context.
+
